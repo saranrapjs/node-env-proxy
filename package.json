@@ -1,0 +1,13 @@
+{
+  "name": "env-proxy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {},
+  "author": "Dylan Nelson",
+  "license": "ISC",
+  "dependencies": {
+    "http-proxy": "^1.14.0",
+    "url-pattern": "^1.0.1"
+  }
+}
