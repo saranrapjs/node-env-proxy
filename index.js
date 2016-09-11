@@ -37,8 +37,12 @@ function startProxy(configPath) {
 function stopProxy() {
   var pid = tmpData.getPid();
   if (pid !== null) {
-    process.kill(pid);
-    console.log(chalk.blue(`Stopped proxy server at pid ${pid}. Goodbye!`));
+    try {
+      process.kill(pid);
+      console.log(chalk.blue(`Stopped proxy server at pid ${pid}. Goodbye!`));
+    } catch (e) {
+      console.log(chalk.red('Could not find proxy process. Try stopping it manually with `kill` and restart.'));
+    }
   } else {
     console.log(chalk.red('Found no information about running proxy server.'));
   }
