@@ -1,17 +1,12 @@
 #!/usr/bin/env node
 
-var ConfigReader = require('./lib/ConfigReader.js');
 var EnvProxyFactory = require('./lib/EnvProxyFactory.js');
+var TmpRuntimeData = require('./lib/TmpRuntimeData.js');
 
-configPath = process.argv[2];
-configReader = new ConfigReader(configPath);
-
-var proxyHostName = configReader.getProxyHostName();
-var proxyPort = configReader.getProxyPort();
-var proxyURLs = configReader.getProxyURLs();
+var tmpData = new TmpRuntimeData();
 
 EnvProxyFactory({
-  hostName: proxyHostName,
-  port: proxyPort,
-  urls: proxyURLs,
+  hostName: tmpData.getHostName(),
+  port: tmpData.getPort(),
+  urls: tmpData.getUrls(),
 });

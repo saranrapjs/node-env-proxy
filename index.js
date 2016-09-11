@@ -3,18 +3,31 @@
 var chalk = require('chalk');
 var childProcess = require('child_process');
 var ps = require('ps');
+var yargs = require('yargs');
 
+var ConfigReader = require('./lib/ConfigReader.js');
 var TmpRuntimeData = require('./lib/TmpRuntimeData.js');
 
 var tmpData = new TmpRuntimeData();
+var parsedArgv = yargs.argv;
 
 function checkForExistingProcess() {
 }
 
 function startProxy(configPath) {
+  configReader = new ConfigReader(configPath);
+
+  try {
+    tmpData.writeRuntimeConfig(
+      configReader.getConfigObj(),
+      parsedArgv
+    );
+  } catch (e) {
+    throw e;
+  }
+
   child = childProcess.spawn(
     './server.js',
-    [configPath],
     { detached: false, stdio: 'inherit' }
   );
 
