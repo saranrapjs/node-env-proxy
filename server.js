@@ -1,18 +1,17 @@
 #!/usr/bin/env node
 
+var ConfigReader = require('./lib/ConfigReader.js');
 var EnvProxyFactory = require('./lib/EnvProxyFactory.js');
-var fs = require('fs');
 
-var config = JSON.parse(
-  fs.readFileSync('./examples/scoop.json').toString()
-);
+configPath = process.argv[2];
+configReader = new ConfigReader(configPath);
 
-var proxyOptions = {};
+var proxyHostName = configReader.getProxyHostName();
+var proxyPort = configReader.getProxyPort();
+var proxyURLs = configReader.getProxyURLs();
 
-for (app in config) {
-  var proxy = config[app].proxy;
-  var address = config[app][config[app].default];
-  proxyOptions[proxy] = address;
-}
-
-EnvProxyFactory(proxyOptions);
+EnvProxyFactory({
+  hostName: proxyHostName,
+  port: proxyPort,
+  urls: proxyURLs,
+});
