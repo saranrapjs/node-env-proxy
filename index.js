@@ -48,6 +48,26 @@ function stopProxy() {
   }
 }
 
+function updateProxy(configPath) {
+  var configReader = new ConfigReader(configPath);
+  var pid = tmpData.getPid();
+
+  try {
+    tmpData.writeRuntimeConfig(
+      configReader.getConfigObj(),
+      parsedArgv
+    );
+  } catch (e) {
+    throw e;
+  }
+
+  try {
+    process.kill(pid, 'SIGHUP');
+  } catch (e) {
+    console.log(chalk.red('Could not find proxy process. Try stopping it manually with `kill` and restart.'));
+  }
+}
+
 function reloadConfig() {}
 
 var command = process.argv[2];
@@ -59,6 +79,10 @@ switch (command) {
   }
   case 'stop': {
     stopProxy();
+    break;
+  }
+  case 'update': {
+    updateProxy(process.argv[3]);
     break;
   }
 }
