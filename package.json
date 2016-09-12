@@ -4,6 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {},
+  "bin": {
+    "proxy": "./index.js"
+  },
   "author": "Dylan Nelson",
   "license": "ISC",
   "dependencies": {
