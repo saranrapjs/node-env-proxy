@@ -6,23 +6,22 @@ var TmpRuntimeData = require('./lib/TmpRuntimeData.js');
 var tmpData = new TmpRuntimeData();
 var proxy;
 
+proxy = EnvProxyFactory({
+  hostName: tmpData.getHostName(),
+  port: tmpData.getPort(),
+  urls: tmpData.getUrls(),
+});
+
 process.on('SIGINT', function() {
   tmpData.cleanUpPid();
   process.exit();
 });
 
 process.on('SIGHUP', function() {
-  proxy.close(function() {
-    proxy = EnvProxyFactory({
-      hostName: tmpData.getHostName(),
-      port: tmpData.getPort(),
-      urls: tmpData.getUrls(),
-    });
-  });
+  try {
+    proxy.setUrls(tmpData.getUrls());
+  } catch (e) {
+    throw e;
+  }
 });
 
-proxy = EnvProxyFactory({
-  hostName: tmpData.getHostName(),
-  port: tmpData.getPort(),
-  urls: tmpData.getUrls(),
-});
