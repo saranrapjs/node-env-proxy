@@ -8,7 +8,7 @@ var proxy;
 
 process.on('SIGINT', function() {
   tmpData.cleanUpPid();
-  process.kill();
+  process.exit();
 });
 
 process.on('SIGHUP', function() {
