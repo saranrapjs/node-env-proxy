@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+require('console.table');
+
 var chalk = require('chalk');
 var childProcess = require('child_process');
 var ps = require('ps');
@@ -28,9 +30,10 @@ function startProxy(configPath) {
 
   child = childProcess.spawn(
     './server.js',
-    { detached: false, stdio: 'inherit' }
+    { detached: true }
   );
 
+  child.unref();
   tmpData.writePid(child.pid);
 }
 
@@ -68,6 +71,15 @@ function updateProxy(configPath) {
   }
 }
 
+function lsProxy() {
+  let status = [];
+  let config = tmpData.getRuntimeConfig();
+  for (key in config.urls) {
+    status.push({ proxy: key, target: chalk.green(config.urls[key]) });
+  }
+  console.table(status);
+}
+
 function reloadConfig() {}
 
 var command = process.argv[2];
@@ -75,6 +87,8 @@ var command = process.argv[2];
 switch (command) {
   case 'start': {
     startProxy(process.argv[3]);
+    lsProxy();
+    process.stdout.end();
     break;
   }
   case 'stop': {
@@ -83,7 +97,12 @@ switch (command) {
   }
   case 'update': {
     updateProxy(process.argv[3]);
+    lsProxy();
+    process.stdout.end();
+    break;
+  }
+  case 'stat': {
+    lsProxy();
     break;
   }
 }
-

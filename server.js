@@ -18,10 +18,6 @@ process.on('SIGINT', function() {
 });
 
 process.on('SIGHUP', function() {
-  try {
-    proxy.setUrls(tmpData.getUrls());
-  } catch (e) {
-    throw e;
-  }
+  try { proxy.setUrls(tmpData.getUrls()); }
+  catch (e) { throw e; }
 });
-
