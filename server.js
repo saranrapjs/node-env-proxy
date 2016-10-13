@@ -3,8 +3,12 @@
 var EnvProxyFactory = require('./lib/EnvProxyFactory.js');
 var TmpRuntimeData = require('./lib/TmpRuntimeData.js');
 
-var tmpData = new TmpRuntimeData();
+var config = JSON.parse(process.argv[2]);
+var tmpData = new TmpRuntimeData(config);
 var proxy;
+
+try { tmpData.writeDefaults(); }
+catch (e) { throw e; }
 
 proxy = EnvProxyFactory({
   hostName: tmpData.getHostName(),
