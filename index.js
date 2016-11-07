@@ -14,9 +14,6 @@ var TmpRuntimeData = require('./lib/TmpRuntimeData.js');
 var tmpData = new TmpRuntimeData();
 var parsedArgv = yargs.argv;
 
-function checkForExistingProcess() {
-}
-
 function startProxy(config) {
 
   child = childProcess.spawn(
@@ -89,6 +86,7 @@ function reloadConfig() {}
 var command = process.argv[2];
 
 module.exports.start = function(config) {
+  console.log('Starting proxy on port ' + config.port + ' at hostname ' + config.hostName);
   startProxy(config);
 }
 
