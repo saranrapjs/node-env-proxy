@@ -76,9 +76,9 @@ function checkProxy() {
 }
 
 function lsProxy() {
-  let status = [];
-  let config = tmpData.getRuntimeConfig();
-  for (key in config.apps) {
+  var status = [];
+  var config = tmpData.getRuntimeConfig();
+  for (var key in config.apps) {
     status.push({ App: key, Environment: chalk.green(config.apps[key]) });
   }
   console.table(status);
