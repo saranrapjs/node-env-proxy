@@ -60,11 +60,14 @@ function updateProxy(settings) {
 function checkProxy() {
   return q.Promise(function(resolve, reject, notify) {
     var pid = tmpData.getPid();
-    if (!pid) { reject(new Error('No running proxy found.')); return; }
+    if (!pid) {
+      reject(new Error('No running proxy found.'));
+      return;
+    }
 
     ps.lookup({ pid: pid }, function(err, resultList) {
-      if (!err && resultList.length > 0) {
-        resolve(resultList[0]);
+      if (!err && resultList) {
+        resolve(pid);
       } else {
         reject(new Error('No running proxy found.'));
       }
@@ -86,8 +89,15 @@ function reloadConfig() {}
 var command = process.argv[2];
 
 module.exports.start = function(config) {
-  console.log('Starting proxy on port ' + config.port + ' at hostname ' + config.hostName);
-  startProxy(config);
+  checkProxy()
+    .then(function(pid) {
+      console.log(chalk.blue('Proxy already running at pid ' + pid + ':\n'));
+      lsProxy();
+    })
+    .catch(function(e) {
+      console.log('Starting proxy on port ' + config.port + ' at hostname ' + config.hostName + '...');
+      startProxy(config);
+    });
 }
 
 module.exports.stop = function() {
