@@ -88,7 +88,7 @@ function reloadConfig() {}
 
 var command = process.argv[2];
 
-module.exports.start = function(config) {
+module.exports.start = function(config, options) {
   checkProxy()
     .then(function(pid) {
       console.log(chalk.blue('Proxy already running at pid ' + pid + ':\n'));
@@ -97,6 +97,9 @@ module.exports.start = function(config) {
     .catch(function(e) {
       console.log('Starting proxy on port ' + config.port + ' at hostname ' + config.hostName + '...');
       startProxy(config);
+      setTimeout(function () {
+        updateProxy(options);
+      }, 500);
     });
 }
 
