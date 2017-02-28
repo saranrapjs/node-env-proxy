@@ -14,19 +14,21 @@ var TmpRuntimeData = require('./lib/TmpRuntimeData.js');
 var tmpData = new TmpRuntimeData();
 var parsedArgv = yargs.argv;
 
-function startProxy(config) {
-
+function startProxy(config, options) {
   child = childProcess.spawn(
     path.resolve(__dirname, './server.js'),
     [JSON.stringify(config)],
     {
-      detached: true,
-      stdio: 'ignore'
+      detached: options.debug ? false : true,
+      stdio: options.debug ? 'inherit' : 'ignore',
     }
   );
 
   tmpData.writePid(child.pid);
-  child.unref();
+
+  if (!options.debug) {
+    child.unref();
+  }
 }
 
 function stopProxy() {
@@ -96,7 +98,7 @@ module.exports.start = function(config, options) {
     })
     .catch(function(e) {
       console.log('Starting proxy on port ' + config.port + ' at hostname ' + config.hostName + '...');
-      startProxy(config);
+      startProxy(config, options);
       setTimeout(function () {
         updateProxy(options);
       }, 500);
