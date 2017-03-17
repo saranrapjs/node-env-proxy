@@ -4,7 +4,12 @@ var EnvProxyFactory = require('./lib/EnvProxyFactory.js');
 var TmpRuntimeData = require('./lib/TmpRuntimeData.js');
 
 var config = JSON.parse(process.argv[2]);
-var middleware = require(config.middleware);
+
+var middleware = null;
+
+try {
+  middleware = require(config.middleware);
+} catch (e) {}
 
 var tmpData = new TmpRuntimeData(config);
 var proxy;
