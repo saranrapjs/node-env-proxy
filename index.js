@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-require('console.table');
+var Table = require('easy-table');
 
 var chalk = require('chalk');
 var childProcess = require('child_process');
@@ -80,10 +80,15 @@ function checkProxy() {
 function lsProxy() {
   var status = [];
   var config = tmpData.getRuntimeConfig();
+  var table = new Table();
+
   for (var key in config.apps) {
-    status.push({ App: key, Environment: chalk.green(config.apps[key]) });
+    table.cell(chalk.cyan('App'), key);
+    table.cell(chalk.cyan('Environment'), chalk.green(config.apps[key]));
+    table.newRow();
   }
-  console.table(status);
+
+  console.log(table.toString());
 }
 
 function reloadConfig() {}
